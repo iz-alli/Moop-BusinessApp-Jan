@@ -21,6 +21,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Card} from 'react-native-shadow-cards';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const MenuItem = ({navigation}) => 
 {  
@@ -28,13 +29,14 @@ const MenuItem = ({navigation}) =>
 	const [inputValue, setInputValue] = useState("");
 	const toggleModalVisibility = () => {
 		setModalVisible(!isModalVisible);
-    };
+  };
   const [count, setCount] = React.useState(0);
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
   const [menuitem, setMenuitems] = useState([]);
   const [listData, setListData] = useState([]);
+  const [userId, setUserId] = useState([]);
 
     const item=()=>{
       Alert.alert('hi')
@@ -52,11 +54,12 @@ const MenuItem = ({navigation}) =>
       console.log('This row opened', rowKey);
     };
 
-    
-    useEffect(() => {       
-            
-      const unsubscribe = navigation.addListener('focus', () => {
-        fetch('http://testweb.izaap.in/moop/api/index.php/service/menuitems/lists?X-API-KEY=MoopApp2021@!&user_id=251',{
+    displayData = async () => {
+      try {
+        let id = await AsyncStorage.getItem('user_id');
+        console.log("HomeScreen Parse ID - ", id)
+        setUserId(id);     
+        fetch(`http://testweb.izaap.in/moop/api/index.php/service/menuitems/lists?X-API-KEY=MoopApp2021@!&user_id=${userId}`,{
           method: 'GET'
           //Request Type 
           })
@@ -83,7 +86,18 @@ const MenuItem = ({navigation}) =>
           })
           .catch((error) => {
             console.error(error);
-          });
+          });          
+      } catch (error) {
+        Alert.alert(error);
+      }
+    };
+
+    
+    useEffect(() => {       
+            
+      const unsubscribe = navigation.addListener('focus', () => {
+      displayData();
+        
       });
   
   return unsubscribe;
@@ -91,36 +105,36 @@ const MenuItem = ({navigation}) =>
   }, [navigation]);
 
 
-    useEffect(() => {
-    fetch('http://testweb.izaap.in/moop/api/index.php/service/menuitems/lists?X-API-KEY=MoopApp2021@!&user_id=251',{
-      method: 'GET'
-      //Request Type 
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        //console.log(responseJson);
-        return responseJson.data;
-      })
-      .then( data  => {
-            setMasterDataSource(data);     
-            console.log("Data count",data);
-            if(data != undefined){
-                data.map((item, index)=>{  
+  //   useEffect(() => {
+  //   fetch('http://testweb.izaap.in/moop/api/index.php/service/menuitems/lists?X-API-KEY=MoopApp2021@!&user_id=251',{
+  //     method: 'GET'
+  //     //Request Type 
+  //     })
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       //console.log(responseJson);
+  //       return responseJson.data;
+  //     })
+  //     .then( data  => {
+  //           setMasterDataSource(data);     
+  //           console.log("Data count",data);
+  //           if(data != undefined){
+  //               data.map((item, index)=>{  
                
-                // //const obj = JSON.parse(item.menujson);      
-                //     obj.map((objitem, index)=>{       
-                // })       
-                })
-            } 
-            else{
-              console.log('No Data Found');
-              Alert.alert('No Data Found');
-            }           
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  //               // //const obj = JSON.parse(item.menujson);      
+  //               //     obj.map((objitem, index)=>{       
+  //               // })       
+  //               })
+  //           } 
+  //           else{
+  //             console.log('No Data Found');
+  //             Alert.alert('No Data Found');
+  //           }           
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
 
   
   const getMenuItemDetail = (rowMap, rowKey, data) => {

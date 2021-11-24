@@ -125,6 +125,8 @@ export default class AddUpdatePage extends Component{
 
       console.log("componentWillMount AddUpdatePage") 
       this.oper = this.props.route.params?.operation ?? 'add'
+      console.log('Operation Add - ', this.props.route.params?.operation)
+      console.log('Values **', this.props.route.params?.data.id)
       if(this.oper === "update")
       {
         console.log("update")

@@ -373,7 +373,7 @@ myfun = () => {
                     </Text>   
                     <TextInput
                         placeholder='Item Name'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(itemName) => this.setState({ itemName })}
                         value={this.state.itemName}
                         style={{
@@ -397,7 +397,7 @@ myfun = () => {
                     </Text>   
                     <TextInput
                         placeholder='Alter Name'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(alterName) => this.setState({ alterName })}
                         value={this.state.alterName}
                         style={{
@@ -422,7 +422,7 @@ myfun = () => {
                     <TextInput
                         placeholder='Price'
                         keyboardType='numeric'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
 
                       onChangeText={(price) => {
                         var s = `$${price}`
@@ -455,7 +455,7 @@ myfun = () => {
                     <TextInput
                         placeholder='Price Type'
                         keyboardType='numeric'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(priceType) => this.setState({ priceType })}
                         value={this.state.priceType}
                         style={{
@@ -479,7 +479,7 @@ myfun = () => {
                     </Text>   
                     <TextInput
                         placeholder='Menu Type'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         keyboardType='numeric'
                         onChangeText={(menuType) => this.setState({ menuType })}
                         value={this.state.menuType}
@@ -505,7 +505,7 @@ myfun = () => {
                     <TextInput
                         placeholder='Category'
                         keyboardType='numeric'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(category) => this.setState({ category })}
                         value={this.state.category}
                         style={{
@@ -529,7 +529,7 @@ myfun = () => {
                     </Text>   
                     <TextInput
                         placeholder='Modifiers'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(modifiers) => this.setState({ modifiers })}
                         value={this.state.modifiers}
                         style={{
@@ -554,7 +554,7 @@ myfun = () => {
                     <TextInput
                         placeholder='Taxes'
                         keyboardType='numeric'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(taxes) => this.setState({ taxes })}
                         value={this.state.taxes}
                         style={{
@@ -578,7 +578,7 @@ myfun = () => {
                     </Text>   
                     <TextInput
                         placeholder='Description'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(description) => this.setState({ description })}
                         value={this.state.description}
                         style={{
@@ -593,15 +593,8 @@ myfun = () => {
                         }}
                     />
               </View>
-
-              <View style={{flexirection:'row', top:35}}>          
-
-                  
+              <View style={{flexirection:'row', top:35}}>  
         </View>
-
-        
-
-
             <TouchableOpacity style={styles.btn1}>
                 <Text style={styles.btnTxt} onPress = {this.addOrder}>Add/Update Menu Item</Text>
             </TouchableOpacity>

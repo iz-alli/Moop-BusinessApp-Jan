@@ -266,7 +266,7 @@ addOrder =()=>{
                     <TextInput
                         placeholder='Minimum Required'
                         keyboardType='numeric'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(minRequired) => this.setState({ minRequired })}
                         value={this.state.minRequired}
                         style={{
@@ -292,7 +292,7 @@ addOrder =()=>{
                     <TextInput
                         placeholder='Maximum Allowed'
                         keyboardType='numeric'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(maxAllowed) => this.setState({ maxAllowed })}
                         value={this.state.maxAllowed}
                         style={{

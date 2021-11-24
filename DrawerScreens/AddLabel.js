@@ -206,7 +206,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Label Name'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(labelName) => this.setState({ labelName })}
                         value={this.state.labelName}
                         style={{
@@ -230,7 +230,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Printer Name'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(printerName) => this.setState({ printerName })}
                         value={this.state.printerName}
                         style={{

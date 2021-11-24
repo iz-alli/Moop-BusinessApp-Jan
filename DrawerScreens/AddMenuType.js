@@ -214,7 +214,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Title'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(title) => this.setState({ title })}
                         value={this.state.title}
                         style={{
@@ -238,7 +238,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Description'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(description) => this.setState({ description })}
                         value={this.state.description}
                         style={{

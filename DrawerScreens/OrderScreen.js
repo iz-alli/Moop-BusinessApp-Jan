@@ -145,37 +145,18 @@ const searchFilterFunction = (text) => {
   };
 
 
-  // const getItem=(item)=>
-  // {
-  //   setModalVisible(!isModalVisible);
-  //   //Redirect to OrderDetail Page
-  //   console.log("OrderScreen GetItem 22", item)
-  //   //navigation.navigate('AddUpdatePageStack',{screen: 'AddUpdatePage', params: {data: data, operation: 'update'}, });
-  //   navigation.navigate('orderDetailScreenStack', {screen:'OrderDetailPage', params: {data: item, operation: 'update'},});
-  //   //Alert.alert('TableName : ' + item.tableid + '\n' +'Amount : ' + item.amount + '\n' +'Comments : ' + item.comments);
-  // };
 
   const getItem=(item)=>
   {
-    Alert.alert('Id : ' + item.id + '\n'+'Title : ' + item.title);
+    //Alert.alert('Id : ' + item.id + '\n'+'Title : ' + item.title);
     console.log('test22',item)
-    navigation.navigate('orderDetailScreenStack',{
-      screen: 'OrderDetailPage', 
-      params: {data: item, operation: 'updates'},
-  });
+      navigation.navigate('DetailStack',{
+        screen: 'Detail', 
+        params: {data: item, operation: 'updates'},
+    });
   };
 
   
-  // const getItem = (data, rowMap) => {
-  //   {
-  //     setModalVisible(!isModalVisible);
-  //     //Redirect to OrderDetail Page
-  //     console.log("OrderScreen GetItem 22", item)
-  //     //navigation.navigate('AddUpdatePageStack',{screen: 'AddUpdatePage', params: {data: data, operation: 'update'}, });
-  //     navigation.navigate('OrderDescriptionStack', {screen:'OrderDescriptionPage', params: {data: item, operation: 'update'},});
-  //     //Alert.alert('TableName : ' + item.tableid + '\n' +'Amount : ' + item.amount + '\n' +'Comments : ' + item.comments);
-  //   };
-  // }
 
 
   const deleteOrder = (data) => {      

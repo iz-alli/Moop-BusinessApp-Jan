@@ -71,33 +71,37 @@ function AddUpdateOrder({navigation}) {
 
 return(
 
-    <View style={{ margin: 30 }}>
+    <View style={{ margin: 10 }}>
          
-         <View style={{flexDirection:'row',top:20}}>
-          <Text style={{fontSize:16,left:5,top:10,paddingRight:50,fontWeight:'bold'}}>
+         <View style={{top:20}}>
+          <Text style={{fontSize:16,top:10,paddingRight:50,fontWeight:'bold'}}>
             Table No :
           </Text>
           <SelectBox
           baseColor={'#000'}
           dropdownOffset={{top: 0}}
-          containerStyle={{borderColor: 'black', margin: -20, padding: 5}} //replace windowHeight with your own
+          containerStyle={{borderColor: 'black', padding: 5}} //replace windowHeight with your own
           label= ""
           labelHeight={0}
           labelFontSize={0}
           options={tableNo}
+          optionsLabelStyle={{color:'black'}}
+          searchIconColor="black"
+                arrowIconColor="black"
+                toggleIconColor="black"
         value={selectedTeam}
         onChange={onChange()}
         hideInputFilter={false}
       />
         </View>
         <View style={{top:60}}>
-          <Text style={{fontSize:16,left:5,top:10,fontWeight:'bold'}}>
+          <Text style={{fontSize:16,top:10,fontWeight:'bold'}}>
             Special Instructions
           </Text>
-          <View style={{flexDirection:'row',top:20, left: -10}}>
+          <View style={{flexDirection:'row',top:20}}>
           <TextInput
               placeholder='Enter Instructions Here '
-                placeholderTextColor='#303030' 
+                placeholderTextColor='grey' 
                 onChangeText={text => setInstructions(text)}
                 value={instruction}    
                 style={{
@@ -107,35 +111,40 @@ return(
                   padding: 15,
                   height: 100,
                   width: 300,
-                  left:30,
+                  
                   fontWeight:'bold',
                   fontSize:16,                  
                 }}
            />
            </View>
         </View>
-        <View style={{flexDirection:'row',top:90}}>
-              <Text style={{fontSize:16,left:5,top:10,paddingRight:70,fontWeight:'bold'}}>
+        <View style={{top:90}}>
+              <Text style={{fontSize:16,top:10,paddingRight:70,marginBottom: 10 ,fontWeight:'bold'}}>
                   Menu Items :
               </Text>
               <SelectBox
                 label=""
+                selectedItemStyle={{color:'black'}}
+                multiOptionsLabelStyle={{color:'black'}}
+                multiOptionContainerStyle={{backgroundColor:'grey'}}
                 options={listData}
-                containerStyle={{borderColor:'black', margin: -10, padding: 5, left: -35}}
-                selectedValues={selectedTeams}
-                onChangeText={onMultiChange()}
+                containerStyle={{borderColor:'black'}}
+                selectedValues={selectedTeams}                
                 onMultiSelect={onMultiChange()}
                 onTapClose={onMultiChange()}
-                isMulti={true}
+                isMulti
+                searchIconColor="black"
+                arrowIconColor="black"
+                toggleIconColor="black"
               />
           </View>
         
       <View>
-      <View style={{flexDirection:'row',top:50}}>
-      <TouchableOpacity style={styles.btn1}>
-      
-        <Text style={styles.btnTxt} onPress ={()=>addOrder()}>Add/Update</Text>
-      </TouchableOpacity>
+      <View style={{top:140}}>
+          <TouchableOpacity style={styles.btn1}>
+          
+            <Text style={styles.btnTxt} onPress ={()=>addOrder()}>Add/Update</Text>
+          </TouchableOpacity>
       </View>
     </View>
     </View>
@@ -155,14 +164,14 @@ return(
   }
 
   function addOrder(){
-  
+  console.log('selected Menu item - ', JSON.stringify(selectedTeams))
     console.log('selected team'+selectedTeam.id);
        var dataToSend = {
           user_id:'251',
           rest_id:'3',
           table_id:selectedTeam.id,
           seats:'3',
-          menujson:selectedTeams,
+          menujson:JSON.stringify(selectedTeams),
           paymentjson:[{}],
           amount:'500',
           paymentmode:'Apple',
@@ -175,6 +184,7 @@ return(
           special_instruction:instruction,
           tip_amount:10,    
         };
+        console.log(JSON.stringify(dataToSend))
         var formBody = [];
         for (var key in dataToSend) {
           var encodedKey = encodeURIComponent(key);
@@ -201,7 +211,7 @@ return(
               Alert.alert('Order has been placed successfully');
               console.log('Order has been placed successfully');
               tempload=false;
-              this.props.navigation.navigate('orderScreenStack',{Screen:'orderScreen'})
+              navigation.navigate('orderScreenStack',{Screen:'orderScreen'})
             } else {
               setErrortext('Error');
             }
@@ -308,7 +318,7 @@ btn1:{
   borderRadius:10,
   marginLeft:50,
   bottom:20,
-  marginTop:100,
+  
   justifyContent:'center',
   alignItems:'center',
 },

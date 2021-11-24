@@ -31,10 +31,8 @@ const EmployeeNavigationDrawerHeader = (props) => {
                 )
               }>
             <MenuItem onPress={() => props.navigationProps.navigate('employeeStack',{Screen:'Employee'})}>Employees</MenuItem>
-            <MenuItem onPress={() => props.navigationProps.navigate('employeeStack',{Screen:'Employee'})}>Roles</MenuItem>
-            
-            <MenuItem onPress={() => props.navigationProps.navigate('employeeStack',{Screen:'Employee'})}>Permission</MenuItem>
-            
+            <MenuItem onPress={() => props.navigationProps.navigate('employeeStack',{Screen:'Employee'})}>Roles</MenuItem>            
+            <MenuItem onPress={() => props.navigationProps.navigate('employeeStack',{Screen:'Employee'})}>Permission</MenuItem>            
           </Menu>       
         </View>
 

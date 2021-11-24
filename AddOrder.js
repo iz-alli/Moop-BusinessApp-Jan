@@ -12,12 +12,12 @@ const MenuScreen = () => {
 
   return (
     <List.AccordionGroup>
-  <List.Accordion title="Category 1" id="1"
-    left={
-      props =>  
-      <Checkbox.Item label="Item" status="checked"  disabled={false} />
-    }
-  >
+    <List.Accordion title="Category 1" id="1"
+      left={
+        props =>  
+        <Checkbox.Item label="Item" status="checked"  disabled={false} />
+      }
+    >
      <List.Item title="Menu Item 1" />
      <List.Item title="Menu Item 2" />
    </List.Accordion>

@@ -54,13 +54,13 @@ export default class AddEmployee extends Component{
         this.bioInfo = this.props.route.params?.data.item.bio ?? 'Bio';
         this.genderInfo = this.props.route.params?.data.item.gender ?? 'Gender';
         this.addressInfo = this.props.route.params?.data.item.address ?? 'Address';
-        this.countryInfo = this.props.route.params?.data.item.country ?? 'Country';
+        this.countryInfo = this.props.route.params?.data.item.country_id ?? 'Country';
         this.titleInfo = this.props.route.params?.data.item.title ?? 'Title';
         this.stateInfo = this.props.route.params?.data.item.state ?? 'State';
         this.cityInfo = this.props.route.params?.data.item.city ?? 'City';
         this.zipInfo = this.props.route.params?.data.item.zip ?? 'Zip';
-        this.phoneInfo = this.props.route.params?.data.item.role ?? 'Phone';
-        this.roleInfo = this.props.route.params?.data.item.phone ?? 'Role';
+        this.phoneInfo = this.props.route.params?.data.item.phone ?? 'Phone';
+        this.roleInfo = this.props.route.params?.data.item.roles_id ?? 'Role';
 
 
         this.setState({employee_id: this.employeeIdInfo}); 
@@ -142,13 +142,31 @@ addOrder =()=>{
   if(this.oper === "add")
   {
       console.log("Add Operation")
+      //this.validate(this.state.email)
+
+     
 
       if(typeof this.state.email === 'undefined' || typeof this.state.password === 'undefined' || typeof this.state.first_name === 'undefined' || typeof this.state.last_name === 'undefined' || typeof this.state.bio === 'undefined' || typeof this.state.gender === 'undefined' || typeof this.state.address === 'undefined' || typeof this.state.country === 'undefined' || typeof this.state.title === 'undefined' || typeof this.state.states === 'undefined' || typeof this.state.city === 'undefined' || typeof this.state.zip === 'undefined' || typeof this.state.phone === 'undefined' || typeof this.state.role === 'undefined')
       {
           Alert.alert('Please Input Required Fields')
+          
       }
+      
       else
       {
+        console.log(this.state.email);
+          let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+          if (reg.test(this.state.email) === false) {
+            console.log("Email is Not Correct");
+            //this.setState({ email: this.state.email })
+            return false;
+            
+          }
+          else {
+            //this.setState({ email: this.state.email })
+            console.log("Email is Correct");
+          
+    
         if(this.state.password === this.state.confirm_password){
     
           var roleID = this.state.role;
@@ -219,16 +237,29 @@ addOrder =()=>{
               Alert.alert("Password Mismatch")
           }
       }
+    }
   }
   else
   {
     console.log("Update Operation")
-    // if(typeof this.state.email === 'undefined' || typeof this.state.password === 'undefined' || typeof this.state.first_name === 'undefined' || typeof this.state.last_name === 'undefined' || typeof this.state.bio === 'undefined' || typeof this.state.gender === 'undefined' || typeof this.state.address === 'undefined' || typeof this.state.country === 'undefined' || typeof this.state.title === 'undefined' || typeof this.state.states === 'undefined' || typeof this.state.city === 'undefined' || typeof this.state.zip === 'undefined' || typeof this.state.phone === 'undefined' || typeof this.state.role === 'undefined')
-    // {
-    //     Alert.alert('Please Input Required Fields')
-    // }
-    // else{
-      // if(this.state.password === this.state.confirm_password){
+    if(typeof this.state.email === 'undefined' || typeof this.state.password === 'undefined' || typeof this.state.first_name === 'undefined' || typeof this.state.last_name === 'undefined' || typeof this.state.bio === 'undefined' || typeof this.state.gender === 'undefined' || typeof this.state.address === 'undefined' || typeof this.state.country === 'undefined' || typeof this.state.title === 'undefined' || typeof this.state.states === 'undefined' || typeof this.state.city === 'undefined' || typeof this.state.zip === 'undefined' || typeof this.state.phone === 'undefined' || typeof this.state.role === 'undefined')
+    {
+        Alert.alert('Please Input Required Fields')
+    }
+    else{
+      console.log(this.state.email);
+          let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+          if (reg.test(this.state.email) === false) {
+            console.log("Email is Not Correct");
+            //this.setState({ email: this.state.email })
+            Alert.alert('Please Input Valid Email Address')
+            return false;
+            
+          }
+          else {
+            //this.setState({ email: this.state.email })
+            console.log("Email is Correct");
+      if(this.state.password === this.state.confirm_password){
         var roleID = this.state.role;
         roleID = roleID.replace(/\"/g, '');
 
@@ -294,12 +325,30 @@ addOrder =()=>{
               Alert.alert(responseJson.message)
             });  
         }
-        // else{
-        //     Alert.alert("Password Mismatch")
-        // }
-    // }
-  // }   
+        else{
+            Alert.alert("Password Mismatch")
+        }
+    }
+  }
+  }   
 }
+
+
+validate = (text) => {
+  console.log(text);
+  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+  if (reg.test(text) === false) {
+    console.log("Email is Not Correct");
+    this.setState({ email: text })
+    return false;
+  }
+  else {
+    this.setState({ email: text })
+    console.log("Email is Correct");
+  }
+}
+
+
 
  render() {
   //const netInfo = useNetInfo();
@@ -313,7 +362,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Email'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(email) => this.setState({ email })}
                         value={this.state.email}
                         style={{
@@ -337,7 +386,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Password'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(password) => this.setState({ password })}
                         value={this.state.password}
                         style={{
@@ -361,7 +410,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Confirm Password'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(confirm_password) => this.setState({ confirm_password })}
                         value={this.state.confirm_password}
                         style={{
@@ -370,6 +419,7 @@ addOrder =()=>{
                         borderColor: '#000',
                         flex: 1,
                         padding: 15,
+                        color: 'black',
                         //right:70,
                         width:100,
                         height:50   
@@ -385,7 +435,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='First Name'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(first_name) => this.setState({ first_name })}
                         value={this.state.first_name}
                         style={{
@@ -409,7 +459,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Last Name'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(last_name) => this.setState({ last_name })}
                         value={this.state.last_name}
                         style={{
@@ -433,7 +483,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Bio'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(bio) => this.setState({ bio })}
                         value={this.state.bio}
                         style={{
@@ -457,7 +507,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Gender'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(gender) => this.setState({ gender })}
                         value={this.state.gender}
                         style={{
@@ -481,7 +531,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Address'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(address) => this.setState({ address })}
                         value={this.state.address}
                         style={{
@@ -506,7 +556,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Country'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(country) => this.setState({ country })}
                         value={this.state.country}
                         style={{
@@ -531,7 +581,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Title'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(title) => this.setState({ title })}
                         value={this.state.title}
                         style={{
@@ -556,7 +606,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='State'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(states) => this.setState({ states })}
                         value={this.state.states}
                         style={{
@@ -580,7 +630,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='City'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(city) => this.setState({ city })}
                         value={this.state.city}
                         style={{
@@ -605,7 +655,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Zip'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         keyboardType='number-pad'
                         onChangeText={(zip) => this.setState({ zip })}
                         value={this.state.zip}
@@ -631,7 +681,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Phone'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         keyboardType = 'number-pad'
                         onChangeText={(phone) => this.setState({ phone })}
                         value={this.state.phone}
@@ -655,7 +705,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Role'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         keyboardType = 'numeric'
                         onChangeText={(role) => this.setState({ role })}
                         value={this.state.role}

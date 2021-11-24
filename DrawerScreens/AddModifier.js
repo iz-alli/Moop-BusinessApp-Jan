@@ -241,7 +241,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Modifier Group Name'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(modifierGroupName) => this.setState({ modifierGroupName })}
                         value={this.state.modifierGroupName}
                         style={{
@@ -266,7 +266,7 @@ addOrder =()=>{
                     <TextInput
                         placeholder='Minimum Required'
                         keyboardType='numeric'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(minRequired) => this.setState({ minRequired })}
                         value={this.state.minRequired}
                         style={{
@@ -291,7 +291,7 @@ addOrder =()=>{
                     <TextInput
                         placeholder='Maximum Allowed'
                         keyboardType='numeric'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(maxAllowed) => this.setState({ maxAllowed })}
                         value={this.state.maxAllowed}
                         style={{
@@ -316,7 +316,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Modifier Name'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(modifierName) => this.setState({ modifierName })}
                         value={this.state.modifierName}
                         style={{
@@ -340,7 +340,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Modifier Price'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         keyboardType='numeric'
                         onChangeText={(modifierPrice) => this.setState({ modifierPrice })}
                         value={this.state.modifierPrice}
@@ -365,7 +365,7 @@ addOrder =()=>{
                     </Text>   
                     <TextInput
                         placeholder='Modifier Alt Name'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(modifierAltName) => this.setState({ modifierAltName })}
                         value={this.state.modifierAltName}
                         style={{

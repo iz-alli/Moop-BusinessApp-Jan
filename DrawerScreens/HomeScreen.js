@@ -25,6 +25,8 @@ export default class HomeScreen extends Component
 
     componentDidMount(){
       // TODO: What to do with the module?
+      moment.utc("2019-12-04 12:00:24").local().startOf('seconds').fromNow()
+      
       // FTP.setup("139.59.65.210",21) //Setup host
       // FTP.login("root","6cZxbds69^@Ky!*Y").then(
       //   (result)=>{

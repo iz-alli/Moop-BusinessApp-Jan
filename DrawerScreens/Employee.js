@@ -200,13 +200,13 @@ const Employee = ({navigation}) =>
     } catch(e) { console.error(e); } 
   
     
+    
 
     return (      
         <View>
-          <Card style={{width: '95%', padding: 10, margin: 10, backgroundColor:'#F6FAFE'}}>
+          <Card style={{width: '95%',  margin: 10, backgroundColor:'#F6FAFE'}}>
           <TouchableOpacity onPress={() => getItem(item)} >
-            <Text style={styles.itemStyle}>{"First Name :"+ firstName}</Text>  
-            <Text style={styles.itemStyle}>{"Last Name :"+ lastName }</Text>
+            <Text style={styles.itemStyle}>{"Name :"+ firstName + " " + lastName}</Text>             
             <Text style={styles.itemStyle}>{"Email :"+ email }</Text>
             <Text style={styles.itemStyle}>{"Phone :"+ phone }</Text>
             <Text style={styles.itemStyle}>{"Role :"+ roles }</Text>
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     itemStyle: {
-      padding: 10,
+      padding: 5,
     },
     textInputStyle: {
       height: 40,

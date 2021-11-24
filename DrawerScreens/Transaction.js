@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component} from 'react';
 
-import { StyleSheet, Text, TouchableOpacity, TouchableHighlight, View, Modal,Dimensions, Alert} from 'react-native';
+import { StyleSheet, TextInput, Text, TouchableOpacity, TouchableHighlight, View, Modal,Dimensions, Alert} from 'react-native';
 
 import { SwipeListView } from 'react-native-swipe-list-view';
 import {Card} from 'react-native-shadow-cards';
@@ -16,7 +16,9 @@ export default function Basic({navigation}) {
     };
 
   const [listData, setListData] = useState([]);
-
+  
+  const [filteredData, setFilteredData] = useState([]);  
+  const [search, setSearch] = useState('');
 
   useEffect(() => {                   
     const unsubscribe = navigation.addListener('focus', () => {
@@ -54,6 +56,49 @@ return unsubscribe;
 }, [navigation]);
 
 
+
+const searchFilterFunction = (text) => {
+  console.log('searchFilterFunction');
+  // Check if searched text is not blank
+  if (text) {
+    // Inserted text is not blank
+    // Filter the masterDataSource
+    // Update FilteredDataSource
+    console.log(text);
+    const newData = listData.filter(
+      function (item) {
+        const itemData = item.transaction_id
+          ? item.transaction_id.toUpperCase()
+          : ''.toUpperCase();
+
+          const itemData1 = item.transaction_status
+          ? item.transaction_status.toUpperCase()
+          : ''.toUpperCase();
+
+          const itemData2 = item.transacted_from
+          ? item.transacted_from.toUpperCase()
+          : ''.toUpperCase();
+
+        const textData = text.toUpperCase();
+        // return itemData.indexOf(textData) > -1;
+
+        return (
+          itemData.indexOf(textData) > -1 
+          || itemData1.indexOf(textData) > -1 
+          || itemData2.indexOf(textData) > -1
+        )
+    });
+    setFilteredData(newData);
+    setSearch(text);
+  } else {
+    // Inserted text is blank
+    // Update FilteredDataSource with masterDataSource
+    setFilteredData(listData);
+    setSearch(text);
+  }
+};
+
+
   const closeItem = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
       rowMap[rowKey].closeRow();
@@ -80,11 +125,9 @@ return unsubscribe;
       transactionFee=item.transaction_fee;
       referenceID=item.referenceid;                  
     } catch(e) { console.error(e); } 
-    return (      
-      
-        <View>
-                
-                <Card style={{width: '95%', padding: 10, margin: 10, backgroundColor:'#F6FAFE'}}>
+    return (    
+        <View>                
+          <Card style={{width: '95%', padding: 10, margin: 10, backgroundColor:'#F6FAFE'}}>
           <TouchableOpacity onPress={() =>{toggleModalVisibility}} style={styles.rowFront} underlayColor={'#fff'}>
             <Text style={styles.itemStyle}>{"Transaction ID : "+ transactionId }</Text>  
             <Text style={styles.itemStyle}>{"Transacted To : "+ transactedTo}</Text>
@@ -96,8 +139,7 @@ return unsubscribe;
             <Text style={styles.itemStyle}>{"Transaction Fee : $"+ transactionFee}</Text>
             <Text style={styles.itemStyle}>{"Reference ID : "+ referenceID}</Text>
           </TouchableOpacity>
-          </Card>
-          
+          </Card>          
         </View>
     );
   };
@@ -106,14 +148,22 @@ return unsubscribe;
   
 
 
-
-  
-
-
   return (
     <View style={styles.container}>
-      <SwipeListView
-            data={listData}
+          <TextInput
+            style={styles.textInputStyle}
+            onChangeText={(text) => searchFilterFunction(text)}
+            value={search}
+            underlineColorAndroid="transparent"
+            placeholder="Search Here"
+          />
+          <View  style={styles.headerView}>
+          <Text style={styles.txt}>
+              transaction
+          </Text>
+        </View>
+        <SwipeListView
+            data={filteredData && filteredData.length > 0 ? filteredData : listData}
             keyExtractor={(item, index) => index.toString()}
             renderItem={ItemView}           
             
@@ -122,9 +172,8 @@ return unsubscribe;
             previewOpenDelay={3000}
             onRowDidOpen={onItemOpen}
             disableRightSwipe={true} 
-      />
-      
-    </View>
+          />
+      </View>
   );
 }
 
@@ -137,12 +186,10 @@ const styles = StyleSheet.create({
   list: {
     color: '#FFF',
   },
-
   btnText: {
     color: '#FFF',
     textShadowColor: 'white',    
   },
-
   rowFront: {
     //alignItems: 'center',
     //backgroundColor: 'lightcoral',
@@ -172,8 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     //bottom: 40,
     right: 80,
-    //width: 75,
-    
+    //width: 75,    
     //top: 20,
     // height: '100%'
   },
@@ -181,7 +227,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     right: 10,
   },
-  
+  textInputStyle: {
+    height: 40,
+    borderWidth: 2,
+    paddingLeft: 20,
+    borderRadius:10,
+    margin: 5,
+    borderColor: '#5F6160',
+    backgroundColor: '#F6FAFE',
+  },
+  headerView:{    
+    alignItems: 'center',    
+  },
   addButton:{
     position:'absolute',
     zIndex:11,

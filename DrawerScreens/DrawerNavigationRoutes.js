@@ -18,6 +18,7 @@ import Categories from './Categories';
 import Labels from './Labels';
 import Modifiers from './Modifiers';
 import orderScreen from './OrderScreen';
+import Detail from './Detail';
 import orderDetailPage from './OrderDetailPage';
 import ReportsScreen from './ReportsScreen';
 import Employee from './Employee';
@@ -207,6 +208,38 @@ const orderScreenStack = ({navigation}) => {
   );
 };
 
+const DetailStack = ({navigation}) => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Detail"
+      screenOptions={{
+        headerLeft: () => (          
+          <OrderNavigationDrawer navigationProps={navigation} />          
+        ),
+        headerStyle: {
+          backgroundColor: '#DB3133', //Set Header color
+        },
+        headerTintColor: '#fff', //Set Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold', //Set Header text style
+        },
+      }}>
+      <Stack.Screen
+        name="Detail"
+        component={Detail}
+        options={({navigation, route}) => ({
+          headerLeft: (props) => (
+            <HeaderBackButton
+              {...props}
+              onPress={() => navigation.navigate('orderScreen')}
+            />
+          ),
+     })}
+      />
+      
+    </Stack.Navigator>
+  );
+};
 
 const orderDetailScreenStack = ({navigation}) => {
   return (
@@ -807,6 +840,14 @@ const DrawerNavigatorRoutes = (props) => {
       options={{drawerLabel:"Order Screen"}}
       component={orderScreenStack}
       />
+
+<Drawer.Screen
+      name="DetailStack"
+      options={{drawerLabel:"Order Screen"}}
+      component={DetailStack}
+      />
+
+
       <Drawer.Screen
        name="orderDetailScreenStack"
         options={{drawerLabel:"Order Screen"}}

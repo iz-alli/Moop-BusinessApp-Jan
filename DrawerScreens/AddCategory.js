@@ -229,7 +229,7 @@ var userIdInt = Number(str);
                     </Text>   
                     <TextInput
                         placeholder='Title'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(title) => this.setState({ title })}
                         value={this.state.title}
                         style={{
@@ -253,7 +253,7 @@ var userIdInt = Number(str);
                     </Text>   
                     <TextInput
                         placeholder='Description'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         onChangeText={(description) => this.setState({ description })}
                         value={this.state.description}
                         style={{
@@ -277,7 +277,7 @@ var userIdInt = Number(str);
                     </Text>   
                     <TextInput
                         placeholder='Category Tax'
-                        placeholderTextColor='#303030'
+                        placeholderTextColor='grey'
                         keyboardType='numeric'
                         onChangeText={(categoryTax) => this.setState({ categoryTax })}
                         value={this.state.categoryTax}
