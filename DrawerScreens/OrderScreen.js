@@ -110,7 +110,7 @@ const searchFilterFunction = (text) => {
   
   const ItemView = ({item}) => 
   {        
-    let id="", tableid="",seats="",amount="",orderdatetime="",updatedatetime="",completeddatetime="",specialInstruction="", comments="", tipAmount=""; 
+    let id="", tableid="",seats="",amount="",orderdatetime="",updatedatetime="",completeddatetime="",specialInstruction="", comments="", tipAmount="", crossedAverageTime="", timeSince=""; 
     try{   
       tableid=item.tableid;
       seats=item.seats;
@@ -122,24 +122,53 @@ const searchFilterFunction = (text) => {
       comments=item.comments;
       tipAmount=item.tip_amount;
       id=item.id;
+      crossedAverageTime=item.crossedAverageTime;
+      timeSince=item.time_since;
             
     } catch(e) { console.error(e); } 
     return (            
         <View>                
-          <Card style={{width: '95%', padding: 10, margin: 10, backgroundColor:'#F6FAFE'}}>
-            {/* <TouchableOpacity onPress={() =>{toggleModalVisibility}} style={styles.rowFront} underlayColor={'#fff'}> */}
-            <TouchableOpacity onPress={() => getItem(item)} style={styles.rowFront} underlayColor={'#fff'}>   
-              <Text style={styles.itemStyle}>{"Table Number : "+ tableid }</Text>  
-              <Text style={styles.itemStyle}>{"Seats : "+ seats}</Text>
-              <Text style={styles.itemStyle}>{"Amount : $"+ amount }</Text>
-              <Text style={styles.itemStyle}>{"Comments : "+ comments }</Text>            
-              <Text style={styles.itemStyle}>{"Special Instruction : "+ specialInstruction}</Text>
-              <Text style={styles.itemStyle}>{"Tip Amount : $"+ tipAmount}</Text>
-              <Text style={styles.itemStyle}>{"Order Date Time : "+ moment(orderdatetime).format("MM-DD-YYYY hh:mma")}</Text>
-              <Text style={styles.itemStyle}>{"Update Date Time : "+ moment(updatedatetime).format("MM-DD-YYYY hh:mma")}</Text>
-              <Text style={styles.itemStyle}>{"Completed Date Time : "+ moment(completeddatetime).format("MM-DD-YYYY hh:mma")}</Text>
-            </TouchableOpacity>
-          </Card>          
+
+        {(
+                (crossedAverageTime === "No") ? 
+
+            <Card style={{width: '95%', padding: 10, margin: 10, backgroundColor:'#F6FAFE'}}>
+           
+                {/* <TouchableOpacity onPress={() =>{toggleModalVisibility}} style={styles.rowFront} underlayColor={'#fff'}> */}
+                <TouchableOpacity onPress={() => getItem(item)} style={styles.rowFront} underlayColor={'#fff'}>   
+                  <Text style={styles.itemStyle}>{"Table Number : "+ tableid }</Text>  
+                  <Text style={styles.itemStyle}>{"Seats : "+ seats}</Text>
+                  <Text style={styles.itemStyle}>{"Amount : $"+ amount }</Text>
+                  <Text style={styles.itemStyle}>{"Comments : "+ comments }</Text>            
+                  <Text style={styles.itemStyle}>{"Special Instruction : "+ specialInstruction}</Text>
+                  <Text style={styles.itemStyle}>{"Tip Amount : $"+ tipAmount}</Text>
+                  <Text style={styles.itemStyle}>{"Order Date Time : "+ moment(orderdatetime).format("MM-DD-YYYY hh:mma")}</Text>
+                  <Text style={styles.itemStyle}>{"Update Date Time : "+ moment(updatedatetime).format("MM-DD-YYYY hh:mma")}</Text>
+                  <Text style={styles.itemStyle}>{"Completed Date Time : "+ moment(completeddatetime).format("MM-DD-YYYY hh:mma")}</Text>
+                  <Text style={styles.itemStyle}>{"Crossed Average Time : "+ crossedAverageTime}</Text>
+                  <Text style={styles.itemStyle}>{"Time Siince : "+ timeSince}</Text>
+
+                </TouchableOpacity>
+            </Card>   
+            :
+            <Card style={{width: '95%', padding: 10, margin: 10, backgroundColor:'#DB3133'}}>           
+                  {/* <TouchableOpacity onPress={() =>{toggleModalVisibility}} style={styles.rowFront} underlayColor={'#fff'}> */}
+                  <TouchableOpacity onPress={() => getItem(item)} style={styles.rowFront} underlayColor={'#fff'}>   
+                    <Text style={styles.itemStyle}>{"Table Number : "+ tableid }</Text>  
+                    <Text style={styles.itemStyle}>{"Seats : "+ seats}</Text>
+                    <Text style={styles.itemStyle}>{"Amount : $"+ amount }</Text>
+                    <Text style={styles.itemStyle}>{"Comments : "+ comments }</Text>            
+                    <Text style={styles.itemStyle}>{"Special Instruction : "+ specialInstruction}</Text>
+                    <Text style={styles.itemStyle}>{"Tip Amount : $"+ tipAmount}</Text>
+                    <Text style={styles.itemStyle}>{"Order Date Time : "+ moment(orderdatetime).format("MM-DD-YYYY hh:mma")}</Text>
+                    <Text style={styles.itemStyle}>{"Update Date Time : "+ moment(updatedatetime).format("MM-DD-YYYY hh:mma")}</Text>
+                    <Text style={styles.itemStyle}>{"Completed Date Time : "+ moment(completeddatetime).format("MM-DD-YYYY hh:mma")}</Text>
+                    <Text style={styles.itemStyle}>{"Crossed Average Time : "+ crossedAverageTime}</Text>
+                    <Text style={styles.itemStyle}>{"Time Siince : "+ timeSince}</Text>
+
+                    </TouchableOpacity>
+            </Card>   
+        )}
         </View>
     );
   };
@@ -179,8 +208,7 @@ const searchFilterFunction = (text) => {
       },
     })
       .then((response) => response.json())
-      .then((responseJson) => {
-        
+      .then((responseJson) => {        
         console.log(responseJson);        
         if (responseJson.status === 'success') {         
 
@@ -251,10 +279,8 @@ const searchFilterFunction = (text) => {
     //     .catch((error) => {
     //       console.error(error);
     //     });
-
     //console.log('RowMap - *** ', rowMap._dispatchInstances._debugOwner)
-    //console.log('Order Get Detail - Row Key', rowMap)
-    
+    //console.log('Order Get Detail - Row Key', rowMap)    
   }
 
 
@@ -262,7 +288,6 @@ const searchFilterFunction = (text) => {
     // console.log("Data Item ID", data.item.id);
     // console.log("Row Map", rowMap);
     // console.log("Data", data);
-
     return (
     <View style={styles.rowBack}>
       <TouchableOpacity style={[styles.actionButton, styles.closeBtn]} onPress={() => {getOrderDetail(rowMap, data.item.key, data)}}>      
@@ -322,12 +347,14 @@ const searchFilterFunction = (text) => {
       <TouchableOpacity style={styles.addButton} onPress={() =>navigation.navigate('AddUpdateOrderStack',{Screen:'AddUpdateOrder', params: {operation:'add'}})}>
           <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
+      
     </View>
     </SafeAreaView>
   );
 }
 
-
+//AddUpdateOrder - Add/Update Order Page
+//AddOrderMenu - Add MenuItem page
 
 const styles = StyleSheet.create({
   container: {
@@ -364,7 +391,7 @@ const styles = StyleSheet.create({
     //borderBottomColor: 'black',
     //borderBottomWidth: 0.5,
     //justifyContent: 'center',
-    height: 180,
+    height: 200,
   },
   rowBack: {
     alignItems: 'center',
@@ -405,6 +432,19 @@ const styles = StyleSheet.create({
     zIndex:11,
     right:20,
     bottom:50,
+    backgroundColor:'#DB3133',
+    width:80,
+    height:80,
+    borderRadius:50,
+    alignItems:'center',
+    justifyContent:'center',
+    elevation:8,
+  },
+  addButtonNew:{
+    position:'absolute',
+    zIndex:11,
+    right:20,
+    bottom:100,
     backgroundColor:'#DB3133',
     width:80,
     height:80,

@@ -5,11 +5,16 @@ import { ScrollView } from 'react-native-gesture-handler';
 import ImgToBase64 from 'react-native-image-base64';
 import Font from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-community/async-storage';
-import * as ImagePicker from "react-native-image-picker"
+//import { ImagePicker, launchImageLibrary, launchCamera, showImagePicker } from 'react-native-image-picker';
+import * as ImagePicker from 'react-native-image-picker';
 var img;
 var data;
 
-
+const options = {
+  title: 'Moop Business',
+  takePhotoButtonTitle: 'Take Photo',
+  chooseFromLibraryButtonTitle: 'Choose From Photo Library',
+};
 export default class AddMenuItem extends Component{
  
   constructor(props){ 
@@ -150,12 +155,13 @@ addOrder =()=>{
   if(this.oper === "add")
   {
       console.log("Add Operation")
+      console.log(global.image)
       var dataToSend = {
         user_id:userID,
         rest_id:3,
         itemname:this.state.itemName,
         altername:this.state.alterName,
-        menuimage:'x',
+        menuimage:global.image,
         price:this.state.price,
         pricetype:this.state.priceType,
         menutype:this.state.menuType,
@@ -209,7 +215,7 @@ addOrder =()=>{
       rest_id:3,
       itemname:this.state.itemName,
       altername:this.state.alterName,
-      menuimage:'x',
+      menuimage:global.image,
       price:this.state.price,
       pricetype:this.state.priceType,
       menutype:this.state.menuType,
@@ -262,48 +268,38 @@ addOrder =()=>{
 
 //Image picker - Photo from gallery or Take Photo - converted to byte64 and saved to global variable and show it in UI
 myfun = () => {
-  // alert('clicked');
-  
- 
+   
+  ImagePicker.launchImageLibrary({
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 500,
+    maxWidth: 500,
+    quality: 1,
+  }, (res) => {
 
-
-   ImagePicker.showImagePicker(options, response => {
-    options.maxWidth = 250;
-    options.maxHeight = 250;
-    options.quality = 0.5;
-    if (response.didCancel) {
-    } else if (response.error) {
-    } else if (response.customButton) {
+    console.log('Response = ', res.assets[0].base64);
+    console.log('Options = ', options);
+   
+    if (res.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (res.error) {
+      console.log('ImagePicker Error: ', res.error);
+    } else if (res.customButton) {
+      console.log('User tapped custom button: ', res.customButton);
+      alert(res.customButton);
     } else {
-      //const source = {uri: response.uri};
-      // You can also display the image using data:
-      try{
-       // const base64 = await FileSystem.readAsStringAsync(response.uri, { encoding: 'base64' });
-      // console.warn(response.uri);
-       ImgToBase64.getBase64String(response.uri)
-      .then(base64String => {
-          global.image = base64String;
-      console.warn(global.image);
-       })
-      .catch(err => console.warn(err));
-
-//console.warn(base64String);
-
-        const source = {uri: 'data:image/jpeg;base64,' + response.data};
-     //   global.image = response.data;
-        
-        //saving byte64 to a global variable.
-        this.setState({
-          avatarSource: source,
-          data: response.data,
-        });
-      }
-      catch(e)
-      {
-        console.error(e);
-      }
+      console.log('2222') 
+      const source = {uri: 'data:image/jpeg;base64,' + res.assets[0].base64};
+          global.image = res.assets[0].base64;      
+          //global.front = source    
+          //saving byte64 to a global variable.
+          this.setState({
+            avatarSource: source,
+            //data: response.data,
+          });
     }
   });
+
 };
 
 
@@ -367,6 +363,30 @@ myfun = () => {
         <View style={styles.container}>
         <View>
         <ScrollView> 
+
+       
+            
+        <View style={styles.spacing}>
+            <TouchableOpacity onPress={() => this.myfun()}>              
+                <View style={styles.gradientPhoto}>
+                <View style={styles.imgPosition}>{img}</View>
+                <View style={styles.featherViewPhoto}>
+                  <View>
+                    <Font
+                      name="camera"
+                      size={50}
+                      color="#E5E7E9"
+                      activeOpacity="0.5"
+                      style={styles.feather}
+                    />
+                  </View>
+                  <Text style={styles.textConfirm}>Take a Photo</Text>
+                </View>
+                </View>
+             
+            </TouchableOpacity>
+          </View>
+
               <View style={{flexDirection: 'row',top:20}}>
                     <Text style={{  flex: 1, padding: 10, fontSize:18, fontWeight:'bold'}}>
                     {'Item Name'}
@@ -684,7 +704,7 @@ top:50,
 
    spacing: {
     paddingBottom: 10,
-    paddingTop: 10,
+    paddingTop: 20,
     paddingLeft: 10,
     paddingRight: 10,
   },
@@ -733,6 +753,18 @@ top:50,
     fontWeight: 'bold',
     fontSize: 20,
     opacity: 0.8,
+  },
+  gradientPhoto: {
+    width: '100%',
+    height: 250,
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    borderRadius: 10,
+    backgroundColor: '#F2F3F4',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
  

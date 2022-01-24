@@ -5,7 +5,7 @@ import{View,Image,ImageBackground,StyleSheet,Text, Alert}from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { thisTypeAnnotation, throwStatement } from '@babel/types';
 import { color } from 'react-native-reanimated';
-
+import moment from 'moment';
 
 
 export default class HomeScreen extends Component

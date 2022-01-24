@@ -28,7 +28,9 @@ const OrderNavigationDrawer = (props) => {
                   <Text onPress={() => _menu1.show()} style={props.textStyle}>{props.menutext}</Text>
                 )
               }>
-            <MenuItem style = {styles.openOrder} onPress={() => {Alert.alert('Open Order Clicked...')}}>Open Order</MenuItem>            
+
+                
+            <MenuItem style = {styles.openOrder} onPress={() =>props.navObj.navigate('AddUpdateOrderStack',{Screen:'AddUpdateOrder', params: {operation:'add'}})}>Open Order</MenuItem>            
             <MenuDivider />
             <MenuItem style = {styles.completedOrder} onPress={() => {Alert.alert('Completed Order Clicked...')}}>Order Completed</MenuItem>    
             <MenuDivider />

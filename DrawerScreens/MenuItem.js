@@ -15,13 +15,16 @@ import {
   Modal,
   Button,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Card} from 'react-native-shadow-cards';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import AsyncStorage from '@react-native-community/async-storage';
+
+var Image_Http_URL;
 
 const MenuItem = ({navigation}) => 
 {  
@@ -58,8 +61,15 @@ const MenuItem = ({navigation}) =>
       try {
         let id = await AsyncStorage.getItem('user_id');
         console.log("HomeScreen Parse ID - ", id)
+        
+        
+        var userID = id;
+        console.log('1',userID)
+        userID = userID.replace(/\"/g, '');
+        console.log('2',userID)
+    
         setUserId(id);     
-        fetch(`http://testweb.izaap.in/moop/api/index.php/service/menuitems/lists?X-API-KEY=MoopApp2021@!&user_id=${userId}`,{
+        fetch(`http://testweb.izaap.in/moop/api/index.php/service/menuitems/lists?X-API-KEY=MoopApp2021@!&user_id=${userID}`,{
           method: 'GET'
           //Request Type 
           })
@@ -200,8 +210,8 @@ const MenuItem = ({navigation}) =>
 
 
   const renderHiddenItem = (data, rowMap) => {
-    console.log("renderHiddenItem", data.item.id);
-    console.log(rowMap, data);
+    //console.log("renderHiddenItem", data.item.id);
+    //console.log(rowMap, data);
     return(
     <View style={styles.rowBack}>
       <TouchableOpacity style={[styles.actionButton, styles.closeBtn]} onPress={() => {getMenuItemDetail(rowMap, data.item.key, data)}}>      
@@ -231,7 +241,7 @@ const MenuItem = ({navigation}) =>
 
   const ItemView = ({item}) => 
   {  
-    let itemName="",altName="",price="",priceType="",menuType="",category="",modifiers="",taxes="",description="",createdDate="",modifiedDate="",status=""; 
+    let itemName="",altName="",price="",priceType="",menuType="",category="",modifiers="",taxes="",description="",createdDate="",modifiedDate="",status="",menuimage=""; 
     try{   
       itemName=item.itemname;
       altName=item.altername;
@@ -244,28 +254,38 @@ const MenuItem = ({navigation}) =>
       description=item.description;
       createdDate=item.date_created;
       modifiedDate=item.date_modified;
+      menuimage=item.menuimage
+      Image_Http_URL = {uri: 'data:image/jpeg;base64,' + item.menuimage};
     } catch(e) { console.error(e); } 
   
     
 
-    return (      
+    return (  
+     
         <View>
-          <Card style={{width: '95%', padding: 10, margin: 10, backgroundColor:'#F6FAFE'}}>
+          {(
+
+          <Card style={{width: '95%', padding: 5, margin: 5, backgroundColor:'#F6FAFE'}}>
           <TouchableOpacity onPress={() => getItem(item)} style={styles.rowFront} underlayColor={'#fff'}>  
-              <Text style={styles.itemStyle}>{"Menu Item Name: "+itemName}</Text>  
-              <Text style={styles.itemStyle}>{"Menu AlterName: "+altName }</Text> 
-              <Text style={styles.itemStyle}>{"Price: $"+price }</Text> 
-              <Text style={styles.itemStyle}>{"Price Type: "+priceType }</Text> 
-              <Text style={styles.itemStyle}>{"Menu Type: "+menuType }</Text> 
-              <Text style={styles.itemStyle}>{"Category: "+category }</Text> 
-              <Text style={styles.itemStyle}>{"Modifiers: "+modifiers }</Text> 
-              {/* <Text style={styles.itemStyle}>{"Taxes: "+taxes+"%" }</Text>  */}
-              <Text style={styles.itemStyle}>{"Description: "+description }</Text> 
-              {/* <Text style={styles.itemStyle}>{"Created Date: "+ moment(createdDate).format("MM-DD-YYYY hh:mma")}</Text> 
-              <Text style={styles.itemStyle}>{"Modified Date: "+ moment(modifiedDate).format("MM-DD-YYYY hh:mma")}</Text>  */}
-            </TouchableOpacity>
+              <View style={{flex:1, flexDirection: 'row'}}>  
+                  <Image source={Image_Http_URL} style = {styles.imageView} />
+                  <View style={{flex:1, flexDirection: 'column', width: '100%'}}> 
+                    <Text style={styles.itemStyle}>{"Menu Item Name: "+itemName}</Text>  
+                    {/* <Text style={styles.itemStyle}>{"Menu AlterName: "+altName }</Text>  */}
+                    <Text style={styles.itemStyle}>{"Price: $"+price }</Text> 
+                    <Text style={styles.itemStyle}>{"Price Type: "+priceType }</Text> 
+                    {/* <Text style={styles.itemStyle}>{"Menu Type: "+menuType }</Text>  */}
+                    <Text style={styles.itemStyle}>{"Category: "+category }</Text> 
+                    <Text style={styles.itemStyle}>{"Modifiers: "+modifiers }</Text> 
+                  
+                    <Text style={styles.itemStyle}>{"Description: "+description }</Text> 
+                    </View>
+            </View>
+          </TouchableOpacity>
           </Card>
+          )}
         </View>
+     
     );
   };
 
@@ -382,7 +402,8 @@ const styles = StyleSheet.create({
       flex: 1,
     },
     itemStyle: {
-      padding: 10,
+      padding: 3,
+      fontSize: 12,
     },
     textInputStyle: {
       height: 40,
@@ -448,7 +469,7 @@ const styles = StyleSheet.create({
       //borderBottomColor: 'black',
       //borderBottomWidth: 0.5,
       //justifyContent: 'center',
-      height: 180,
+      height: 170,
     },
     rowBack: {
       alignItems: 'center',
@@ -479,6 +500,15 @@ const styles = StyleSheet.create({
       backgroundColor: 'red',
       right: 10,
     },
+    imageView: {     
+      width: 100,    
+      height: 100 ,
+      margin: 7,
+      marginTop:30,
+      borderRadius: 10,    
+      alignItems: 'center',
+      justifyContent: 'center',
+  }, 
 });
 
 export default MenuItem;

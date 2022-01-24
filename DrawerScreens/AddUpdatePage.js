@@ -102,8 +102,6 @@ export default class AddUpdatePage extends Component{
           console.error(error);
         });
 
-
-
         fetch('http://testweb.izaap.in/moop/api/index.php/service/tables/lists?X-API-KEY=MoopApp2021@!&user_id=251',{
           method: 'GET'
           //Request Type 

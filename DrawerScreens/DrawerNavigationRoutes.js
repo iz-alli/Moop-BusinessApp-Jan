@@ -37,6 +37,8 @@ import AddMenuItem from './AddMenuItem';
 import OrderDescriptionPage from './OrderDescriptionPage';
 import AddMenuType from './AddMenuType';
 import AddModifier from './AddModifier';
+import AddOrderMenu from './AddOrderMenu';
+
 import AddCategory from './AddCategory';
 import AddTable from './AddTables';
 import AddLabel from './AddLabel';
@@ -634,6 +636,33 @@ const AddModifierStack = ({navigation}) => {
   );
 };
 
+const AddOrderMenuStack = ({navigation}) => {
+  return (
+    <Stack.Navigator
+      initialRouteName="AddOrderMenu"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerHeader navigationProps={navigation} />
+        ),
+        headerStyle: {
+          backgroundColor: '#DB3133', //Set Header color
+        },
+        headerTintColor: '#fff', //Set Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold', //Set Header text style
+        },
+      }}>
+      <Stack.Screen
+        name="AddOrderMenu"
+        component={AddOrderMenu}
+        options={{
+          title: 'AddOrderMenu', //Set Header Title          
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const AddCategoryStack = ({navigation}) => {
   return (
     <Stack.Navigator
@@ -934,7 +963,7 @@ const DrawerNavigatorRoutes = (props) => {
       options={{drawerLabel:()=>null}}
       component={AddMenuItemStack}/>
 
-<Drawer.Screen
+      <Drawer.Screen
       name="OrderDescriptionStack"
       options={{drawerLabel:()=>null}}
       component={OrderDescriptionStack}/>
@@ -949,6 +978,11 @@ const DrawerNavigatorRoutes = (props) => {
       name="AddModifierStack"
       options={{drawerLabel:()=>null}}
       component={AddModifierStack}/>
+
+     <Drawer.Screen
+      name="AddOrderMenuStack"
+      options={{drawerLabel:()=>null}}
+      component={AddOrderMenuStack}/>
 
       <Drawer.Screen
       name="AddCategoryStack"

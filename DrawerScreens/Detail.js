@@ -18,7 +18,7 @@ export default class Detail extends Component{
  
   static navigationOptions = ({ navigation }) => {
     navigation.route.navigationOptions ={
-      title: 'Detail', //Set Header Title      
+      title: 'Order Detail', //Set Header Title      
     }  
   };
   
@@ -258,30 +258,30 @@ render() {
               </Text>
             </View>
           
-            <View style={{flexDirection:'row', marginLeft: 20, marginRight: 20}}>
+            <View style={{flexDirection:'row', marginTop: 10, marginLeft: 20, marginRight: 20}}>
                  <Text style={{fontWeight:'bold', fontSize:20}}>Order ID: </Text> 
                  <Text style={{fontWeight:'bold', fontSize:18}}>{this.state.order_id} </Text>
             </View>
-            <View style={{flexDirection:'row', marginLeft: 20, marginRight: 20}}>
+            <View style={{flexDirection:'row', marginTop: 10, marginLeft: 20, marginRight: 20}}>
                  <Text style={{fontWeight:'bold'}}>Table Number: {this.state.table_id} </Text>
             </View>
-            <View style={{flexDirection:'row', marginLeft: 20, marginRight: 20}}>
+            <View style={{flexDirection:'row', marginTop: 10, marginLeft: 20, marginRight: 20}}>
                  <Text style={{fontWeight:'bold'}}>Seats: {this.state.seats} </Text>
             </View>
-            <View style={{flexDirection:'row', marginLeft: 20, marginRight: 20}}>
+            <View style={{flexDirection:'row', marginTop: 10, marginLeft: 20, marginRight: 20}}>
                  <Text style={{fontWeight:'bold'}}>Amount: {this.state.amount} </Text>
             </View>
-            <View style={{flexDirection:'row', top: 100 ,marginLeft: 20, marginRight: 20}}>
+            <View style={{flexDirection:'row', marginTop: 10, marginLeft: 20, marginRight: 20}}>
                 <Text style={{fontWeight:'bold'}}>Special Instruction: {this.state.special_instruction} </Text>
                 </View>
-            <View style={{flexDirection:'row', marginLeft: 20, marginRight: 20}}>
-                 <Text style={{fontWeight:'bold'}}>MenuJson: {this.state.menujson} </Text>
+            <View style={{flexDirection:'row', marginTop: 10, marginLeft: 20, marginRight: 20}}>
+                 <Text style={{fontWeight:'bold'}}>Menu Items: {this.state.menujson} </Text>
             </View>
            
 
 
-            <View style={{flexDirection:'row', marginLeft: 20, marginRight: 20}}>
-                    <Text style={{fontWeight:'bold'}}>Comments</Text>
+            <View style={{flexDirection:'row', marginTop: 10,}}>
+                    <Text style={{fontWeight:'bold', marginLeft: 20}}>Comments</Text>
                  <TextInput
                     placeholder='Enter Comments Here '
                         placeholderTextColor='#303030'                
@@ -295,15 +295,16 @@ render() {
                         padding: 15,
                         width:300,
                         height:100,
-                        right:160,
-                        top:60,
+                        //right:160,
+                        marginTop: 30,
                         fontWeight:'bold',
-                        fontSize:18,                  
+                        fontSize:18,  
+                        marginLeft: -90,                
                         }}
                 />
                 </View>
                 
-            <View style={{flexDirection:'row', top: 100 ,marginLeft: 20, marginRight: 20}}>
+            <View style={{flexDirection:'row', marginTop: 10, marginTop: 20, marginLeft: 20, marginRight: 20}}>
               <TouchableOpacity style={styles.cancelButton} >
                   <Text style={styles.buttonTxt}>Cancel Order</Text>
               </TouchableOpacity>

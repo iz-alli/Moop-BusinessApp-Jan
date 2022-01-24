@@ -1,20 +1,19 @@
 import React, { useState,useEffect } from 'react'
-import {StyleSheet,TouchableOpacity, Text, Alert,View,TextInput,ScrollView} from 'react-native'
+import {StyleSheet,TouchableOpacity, Text, Alert,View,TextInput} from 'react-native'
 import SelectBox from 'react-native-multi-selectbox'
-import { xorBy } from 'lodash'
+import { set, xorBy } from 'lodash'
 import { Dropdown } from 'react-native-material-dropdown-v2';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SwipeListView } from 'react-native-swipe-list-view';
-import {Card} from 'react-native-shadow-cards';
+
 // Options data must contain 'item' & 'id' keys
 
-let array = [],tableno=[],temp=[],temps=[],isShow=false;
+let array = [],tableno=[],temp=[],temps=[],modifieraray=[],modifierdetarray=[],menuitemdetarray=[];
 var tempload=false;
-
+var selectedmenu,menu_item,mergedobj;
 function AddUpdateOrder({navigation}) {
-
   const [selectedTeam, setSelectedTeam] = useState({})
   const [selectedTeams, setSelectedTeams] = useState([])
+
   const [tableNo, setTableNo] = useState([])
   const [instruction, setInstructions] = useState()
  
@@ -22,26 +21,34 @@ function AddUpdateOrder({navigation}) {
   let arrayobject={};
   var special_instruction;
 
-  const [listDatas, setListDatas] = useState([]);
+  const USER_1 = {
+    name: 'Tom',
+    age: 20,
+    traits: {
+      hair: 'black',
+      eyes: 'blue'
+    }
+  }
   
-  const [filteredData, setFilteredData] = useState([]); 
-  const [isVisible, setisVisible] = useState()
-  const [isVisibleF, setisVisibleF] = useState()
-  global.menulist=[];
+  const USER_2 = {
+    name: 'Sarah',
+    age: 21,
+    hobby: 'cars',
+    traits: {
+      eyes: 'green',
+    }
+  }
   
-  useEffect(() => {     
-    
-      const unsubscribe = navigation.addListener('focus', () => {
-        displayData();
-      });
-    
+  useEffect(() => {                   
+
       fetch('http://testweb.izaap.in/moop/api/index.php/service/menuitems/lists?X-API-KEY=MoopApp2021@!&user_id=251',{
         method: 'GET'
         //Request Type 
         })
         .then((response) => response.json())
         .then((responseJson) => {
-         
+          //console.log(responseJson);
+          //console.log("response "+responseJson);
           return responseJson.data;
         })
         .then( data  => {
@@ -49,7 +56,8 @@ function AddUpdateOrder({navigation}) {
               if(data != undefined){  
                       data.map((item, index)=>{    
                         array.push({id:item.id,item:item.itemname});  
-                     //   console.log("item "+JSON.stringify(item));
+                        menuitemdetarray.push(item);
+                      //  console.log("item "+JSON.stringify(array));
                    })       
               }
               else
@@ -57,14 +65,15 @@ function AddUpdateOrder({navigation}) {
                 console.log('No Data Found');
                 Alert.alert('No Data Found');
               } 
-             // console.log("MenuIems - ",array)
+             
               setListData(array);
         })
         .catch((error) => {
           console.error(error);
         });
-        
-        fetch('http://testweb.izaap.in/moop/api/index.php/service/tables/lists?X-API-KEY=MoopApp2021@!&user_id=251',{
+     
+
+        fetch('http://testweb.izaap.in/moop/api/index.php/service/modifiers/lists?X-API-KEY=MoopApp2021@!&user_id=251',{
           method: 'GET'
           //Request Type 
           })
@@ -74,135 +83,64 @@ function AddUpdateOrder({navigation}) {
           })
           .then( data  => {
             data.map((item, index)=>{    
-              tableno.push({id:item.id,item:item.tablename});  
+            //  tableno.push({id:item.id,item:item.modifier_name});  
+             // modifierdetarray.push(item);
             })     
-            setTableNo(tableno);  
+          //  setTableNo(tableno);  
           })
           .catch((error) => {
             console.error(error);
           });
-},[listData,listDatas,tableNo]);
 
-displayData = async ()=>{  
+         
+},[listData,tableNo]);
+
+saveMenu = async ()=>{  
   try{  
-   let final_menu= await AsyncStorage.getItem('menu_item'); 
-   if(final_menu){
-    setisVisible(false);
-    setisVisibleF(true);
-   let temp=[];
-   var menulist=JSON.parse(final_menu);
-   menulist.map((item, index)=>{    
-   temp.push(item);
-    })  
-    setListDatas(temp)
-  }else{
-    setisVisible(true);
-    setisVisibleF(false);
-  }
+    let temp=[];
+    let menu_items = await AsyncStorage.getItem('menu_item');   
+   if(menu_items!=null){
+    var obj=JSON.parse(menu_items);
+    for(var i=0;i<obj.length;i++){
+      temp[i]=obj[i];
+    }
+    temp[obj.length]=mergedobj;
+   }else{
+    temp[0]=mergedobj;
+   }
+   AsyncStorage.setItem('menu_item',JSON.stringify(temp));
+  moveScreen();
+  }  
+  catch(error){  
+    console.log("errror or dispplay")
+    alert(error)  
+  }  
+
+}
+
+moveScreen = async ()=>{  
+  try{  
+    let usrer= await AsyncStorage.getItem('menu_item');   
+   //alert("storage "+user);
+   var menulist=JSON.parse(usrer);
+ //  console.log("menu "+JSON.stringify(menulist)); 
+
+   navigation.navigate('AddUpdateOrderStack',{Screen:'AddUpdateOrder'})
+  
+  // console.log("sved "+usrer);
   }  
   catch(error){  
     alert(error)  
-  } 
+  }  
 }  
 
-removeMenu=async()=>{
-  console.log("remove")
-  AsyncStorage.removeItem('menu_item');
-}
-
-const onItemOpen = rowKey => {
-  console.log('This row opened', rowKey);
-};
-
-const ItemView = ({item}) => 
-{        
-  let itemname="",modifiers="",price=""; 
-  try{   
-    itemname=item.itemname;
-    price=item.price;
-   var  modifierslist=item.modifiersdet;
-    try{
-   console.log("modifiers "+JSON.stringify(modifierslist));
-   // var modifierlist=JSON.parse(modifiers);
-    //console.log("menu "+JSON.stringify(menulist));
-      modifierslist.map((item, index)=>{    
-     // console.log("Item "+item.modifier_name);
-      modifiers=item.modifier_name+" "+modifiers;
-      price=price+item.modifier_price;
-    })
-  //  modifiers="";
-  }catch(error){
-console.log("error "+error);
-  }
-                  
-  } catch(e) { console.error(e); } 
-  return (    
-      <View>                
-        <Card style={{width: '95%', padding: 10, margin: 10, backgroundColor:'#F6FAFE'}}>
-        <TouchableOpacity onPress={() =>{toggleModalVisibility}} style={styles.rowFront} underlayColor={'#fff'}>
-          <View  style={styles.rowContainer} > 
-          <View>
-          <Text style={styles.itemStyle}>{ itemname }</Text>  
-          <Text style={styles.itemStyle}>{ modifiers }</Text>
-          </View>
-          <Text style={styles.itemStyle}>{ price }</Text>  
-          </View>
-        </TouchableOpacity>
-        </Card>          
-      </View>
-  );
-};
-
-const ListFooter = () => {
-  //View to set in Footer
-  return (
-    <View>
-{isVisibleF ? (
-    <View>
-        <View style={{top:30}}>
-          <Text style={styles.btn2} onPress ={()=>addmenuitems()}>
-          Add Menu
-        </Text>
-        </View>
-        <View style={{top:10}}>
-          <View  style={styles.rowContainer} > 
-          <Text style={styles.itemStyle}>SubTotal</Text>       
-          <Text style={styles.btn2}>$90.00</Text>  
-          </View>
-
-          <View  style={styles.rowContainer} > 
-          <Text style={styles.btn2}>Tax</Text>       
-          <Text style={styles.btn2}>$2.25</Text>  
-          </View>
-
-          <View  style={styles.rowContainer} > 
-          <Text style={styles.btn2}>Total</Text>       
-          <Text style={styles.btn2}>$92.25</Text>  
-          </View>
-
-          <View  style={styles.rowContainer} > 
-          <Text style={styles.itemStyle}>Cancel Order</Text>       
-          <Text style={styles.itemStyle}>Pay Bill </Text>  
-          </View>
-          </View>
-          </View>
- ) : null}  
-    </View>
-  );
-};
-
-const listHeader=()=>{
-  <View style={{flex:1}}>
-    
-  </View>
-}
 return(
-  
-    <View style={{ margin: 10 ,flex:1}}>
+
+    <View style={{ margin: 10 }}>
          
          <View style={{top:20}}>
           <Text style={{fontSize:16,top:10,paddingRight:50,fontWeight:'bold'}}>
-            Table No :
+            Menu Item :
           </Text>
           <SelectBox
           baseColor={'#000'}
@@ -211,94 +149,172 @@ return(
           label= ""
           labelHeight={0}
           labelFontSize={0}
-          options={tableNo}
+          options={listData}
           optionsLabelStyle={{color:'black'}}
           searchIconColor="black"
           arrowIconColor="black"
           toggleIconColor="black"
-        value={selectedTeam}
-        onChange={onChange}
-        hideInputFilter={false}
-      />
+          value={selectedTeam}
+          onChange={onChange()}
+          hideInputFilter={false}
+         />
         </View>
-        <View style={{top:60}}>
-          <Text style={{fontSize:16,top:10,fontWeight:'bold'}}>
-            Special Instructions
-          </Text>
-          <View style={{flexDirection:'row',top:20}}>
-          <TextInput
-              placeholder='Enter Instructions Here '
-                placeholderTextColor='grey' 
-                onChangeText={text => setInstructions(text)}
-                value={instruction}    
-                style={{
-                  borderWidth: 2,
-                  borderRadius:10,
-                  borderColor: '#000',
-                  padding: 15,
-                  height: 100,
-                  width: 300,
-                  
-                  fontWeight:'bold',
-                  fontSize:16,                  
-                }}
-           />
-           </View>
-        </View>
-        <View style={{top:140}}>
-        {isVisible ? (
-          <TouchableOpacity style={styles.btn1}>
-        <Text style={styles.btnTxt} onPress ={()=>addmenuitems()}>Add MenuffItems</Text>
-        </TouchableOpacity>
-       ) : null}    
-      </View>
-        
+       
+        <View style={{top:90}}>
+              <Text style={{fontSize:16,top:10,paddingRight:70,marginBottom: 10 ,fontWeight:'bold'}}>
+                  Modifiers :
+              </Text>
+              <SelectBox
+                label=""
+                selectedItemStyle={{color:'black'}}
+                multiOptionsLabelStyle={{color:'black'}}
+                multiOptionContainerStyle={{backgroundColor:'grey'}}
+                options={tableNo}
+                containerStyle={{borderColor:'black'}}
+                selectedValues={selectedTeams}                
+                onMultiSelect={onMultiChange()}
+                onTapClose={onMultiChange()}
+                isMulti
+                searchIconColor="black"
+                arrowIconColor="black"
+                toggleIconColor="black"
+              />
+          </View>
         
       <View>
       <View style={{top:140}}>
-      {isShow ? (
-          <TouchableOpacity style={styles.btn1}>    
-            <Text style={styles.btnTxt} onPress ={()=>addmenuitems()}>Add/Update</Text>
+          <TouchableOpacity style={styles.btn1}>
+          
+            <Text style={styles.btnTxt} onPress ={()=>addOrder()}>Add</Text>
           </TouchableOpacity>
-        ) : null}     
       </View>
-     </View>
-       <View style={{top:140}}>
-         <SwipeListView
-            data={listDatas}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={ItemView}           
-            previewRowKey={'0'}
-            previewOpenValue={-40}
-            previewOpenDelay={3000}
-            onRowDidOpen={onItemOpen}
-            disableRightSwipe={true} 
-            removeClippedSubviews={false}
-            ListFooterComponent={ListFooter}
-          />
-       </View>
     </View>
-
+    </View>
+  
 )
  
+  
 
   function onMultiChange() {
- //   console.log("onMultiChange")
+  
     return (item) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
-
+   
   }
 
-  function onChange() {
-    return (val) => setSelectedTeam(val)
+
+  function onChange( options ) {
+    return (val) => getMenuItemView(val)
   }
 
-  function addmenuitems(){
-    navigation.navigate('AddOrderMenuStack',{Screen:'AddOrderMenu'})
+  function getMenuItemView(val){
+    setSelectedTeam(val);
+    let issaved=true;
+    //get ItemView
+    console.log(val.id)
+    selectedmenu=val.item;
+   
+    fetch('http://testweb.izaap.in/moop/api/index.php/service/menuitems/view?X-API-KEY=MoopApp2021@&menu_item_id='+ val.id+{
+      method: 'GET'
+      //Request Type 
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("menu item des"+responseJson);
+        //console.log("response "+responseJson);
+        return responseJson.data;
+      })
+      .then( data  => {
+         
+            var modifiers = data.modifiers; 
+             menu_item=JSON.stringify(data);  
+             mergedobj=JSON.parse(menu_item);
+          //   saveMenu();
+             modifiers= modifiers.replace(/"/g, "");
+             const modifierarr= modifiers.replace(/\[|\]/g,'').split(',');
+             modifieraray=[];
+             modifierdetarray=[];
+             for(var i=0;i<modifierarr.length;i++)
+             {
+               //get ModifierView
+               console.log("I "+i);
+             fetch('http://testweb.izaap.in/moop/api/index.php/service/modifiers/view?X-API-KEY=MoopApp2021@!&modifier_id='+modifierarr[i],{
+            method: 'GET'
+            //Request Type 
+            })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              return responseJson.data;
+            })
+            .then( data  => {
+           //   console.log("md det "+JSON.stringify(data));
+              modifieraray.push({id:data.id,item:data.modifier_name});  
+              modifierdetarray.push(JSON.stringify(data));
+        
+              if(modifierexists(data.modifier_name))
+              {
+
+              }else{
+                tableNo.push({id:data.id,item:data.modifier_name})
+              }
+              
+           //   console.log("i "+i);
+              console.log("length "+modifierarr.length)
+              if(i==modifierarr.length){
+               setTableNo([...tableNo]);
+               setSelectedTeams([...modifieraray])
+             
+             // var json array ="data"
+             
+              let modifier = '{ "modifiersdet" : ['+modifierdetarray+']}';
+              
+              let obj1 = JSON.parse(menu_item);
+              let obj2=JSON.parse(modifier);
+
+              mergedobj = {
+                ...obj1,
+                ...obj2
+              };
+              //console.log("modifiers "+JSON.stringify(mergedobj))
+             
+            }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+            } 
+
+            
+         
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+     
   }
+
+  function modifierexists(modifiername) {
+    return tableNo.some(function(el) {
+      return el.item === modifiername;
+    }); 
+  }
+  //set selecte onmultiselect
+  function setValues(){
+    console.log("modifier array"+JSON.stringify(modifieraray));
+    console.log("selected Teams "+JSON.stringify(selectedTeams))
+    //setSelectedTeams(modifieraray);
+  }
+
+  function addmodifiers(){
+    tableno.push({'id':'23','item':'onions'});  
+    tableno.push({'id':'24','item':'tomato '});          
+    setTableNo(tableno);  
+    console.log(tableNo);    
+  }
+
 
   function addOrder(){
-//  console.log('selected Menu item - ', JSON.stringify(selectedTeams))
-   // console.log('selected team'+selectedTeam.id);
+    saveMenu();
+   /*console.log('selected team'+selectedTeam.id);
        var dataToSend = {
           user_id:'251',
           rest_id:'3',
@@ -338,7 +354,7 @@ return(
           .then((responseJson) => {
             //Hide Loader
             //setLoading(false);
-           // console.log(responseJson);
+            console.log(responseJson);
             // If server response message same as Data Matched
             if (responseJson.status == "success") {
               Alert.alert('Order has been placed successfully');
@@ -353,7 +369,7 @@ return(
             //Hide Loader
             //setLoading(false);
             console.error(error);
-          });
+          });*/
     
    /*  }
     else{
@@ -417,9 +433,7 @@ return(
     }*/
     
   }
-
-    
-
+ 
   
 }
 
@@ -455,17 +469,6 @@ btn1:{
   marginLeft:50,
   bottom:20,
   
-  justifyContent:'center',
-  alignItems:'center',
-},
-btn2:{
-  height:40,  
-  fontWeight:'bold',        
-  borderRadius:10,
-  marginLeft:50,
-  bottom:20,
-  marginRight:50,
-  alignSelf:'flex-end',
   justifyContent:'center',
   alignItems:'center',
 },
@@ -509,12 +512,6 @@ top:50,
     bottom:30,
     fontSize:20,    
    } ,
-
-   rowContainer: {
-    flexDirection: 'row',
-  },
-  rowContainer1: {
-    flexDirection: 'row',
-  }
 });
  
+
