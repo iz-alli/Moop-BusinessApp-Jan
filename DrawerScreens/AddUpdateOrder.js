@@ -217,7 +217,7 @@ return(
           arrowIconColor="black"
           toggleIconColor="black"
         value={selectedTeam}
-        onChange={onChange}
+        onChange={onChange()}
         hideInputFilter={false}
       />
         </View>
@@ -248,7 +248,7 @@ return(
         <View style={{top:140}}>
         {isVisible ? (
           <TouchableOpacity style={styles.btn1}>
-        <Text style={styles.btnTxt} onPress ={()=>addmenuitems()}>Add MenuffItems</Text>
+        <Text style={styles.btnTxt} onPress ={()=>addmenuitems()}>Add MenuItems</Text>
         </TouchableOpacity>
        ) : null}    
       </View>

@@ -3,7 +3,7 @@ import {StyleSheet,TouchableOpacity, Text, Alert,View,TextInput} from 'react-nat
 import SelectBox from 'react-native-multi-selectbox'
 import { set, xorBy } from 'lodash'
 import { Dropdown } from 'react-native-material-dropdown-v2';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // Options data must contain 'item' & 'id' keys
 
@@ -213,7 +213,7 @@ return(
     console.log(val.id)
     selectedmenu=val.item;
    
-    fetch('http://testweb.izaap.in/moop/api/index.php/service/menuitems/view?X-API-KEY=MoopApp2021@&menu_item_id='+ val.id+{
+    fetch('http://testweb.izaap.in/moop/api/index.php/service/menuitems/view?X-API-KEY=MoopApp2021@&menu_item_id='+val.id+{
       method: 'GET'
       //Request Type 
       })
@@ -243,10 +243,11 @@ return(
             })
             .then((response) => response.json())
             .then((responseJson) => {
+              console.log("md det 1"+JSON.stringify(responseJson.status));
               return responseJson.data;
             })
             .then( data  => {
-           //   console.log("md det "+JSON.stringify(data));
+              console.log("md det "+JSON.stringify(data));
               modifieraray.push({id:data.id,item:data.modifier_name});  
               modifierdetarray.push(JSON.stringify(data));
         
